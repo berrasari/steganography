@@ -10,7 +10,7 @@ const button = cva(
     "rounded-xl",
     "text-center",
     "border",
-    "border-blue-400",
+
     "transition-colors",
     "delay-50",
   ],
@@ -35,7 +35,7 @@ const button = cva(
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLAnchorElement>, VariantProps<typeof button> {
   underline?: boolean
-  href: string
+  href?: string
 }
 
 export function Button({ className, intent, size, underline, ...props }: ButtonProps) {
