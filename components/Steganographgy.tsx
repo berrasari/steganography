@@ -19,6 +19,12 @@ const Steganography: React.FC = () => {
     }
   }
 
+  const handleMessageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    let message = event.target.value
+    message = message.toUpperCase()
+    setMessage(message)
+  }
+
   const drawImageOnCanvas = (imageSrc: string) => {
     const canvas = canvasRef.current
     const ctx = canvas?.getContext("2d")
@@ -35,7 +41,7 @@ const Steganography: React.FC = () => {
     }
   }
 
-  const END_OF_MESSAGE = "END_OF_MESSAGE" // Define an end-of-message marker
+  const END_OF_MESSAGE = "$$$$$$" // Define an end-of-message marker
 
   const encodeMessage = () => {
     if (canvasRef.current && message) {
@@ -102,26 +108,33 @@ const Steganography: React.FC = () => {
   }
 
   return (
-    <div className="p-4">
+    <div className="mx-auto p-4">
       <input type="file" onChange={handleImageChange} className="mb-2" />
       <input
         type="text"
         value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        onChange={handleMessageChange}
         placeholder="Message to hide"
         className="mb-2 rounded border p-1"
       />
       <Button onClick={encodeMessage} className="bg-blue-500">
         Encode
       </Button>
-      <Button onClick={decodeMessage} className="bg-green-500">
-        Decode
-      </Button>
+
       <Button onClick={downloadImage} className="bg-red-500">
         Download Image
       </Button>
-      {hiddenMessage && <div className="mt-2">Hidden Message: {hiddenMessage}</div>}
       <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
+      <div className="p-4">
+        <input type="file" onChange={handleImageChange} className="mb-2" />
+
+        <Button onClick={decodeMessage} className="bg-green-500">
+          Decode
+        </Button>
+
+        {hiddenMessage && <div className="mt-2">Hidden Message: {hiddenMessage}</div>}
+        <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
+      </div>
     </div>
   )
 }
