@@ -46,29 +46,50 @@ const Encode: React.FC = () => {
 
   const END_OF_MESSAGE = "$$$$$$" // Define an end-of-message marker
 
+  const setLSB = (byte: number, bit: number): number => {
+    return (byte & ~1) | bit
+  }
+
   const encodeMessage = () => {
     if (encodeRef.current && message) {
       const ctx = encodeRef.current.getContext("2d")
       if (ctx) {
         const imageData = ctx.getImageData(0, 0, encodeRef.current.width, encodeRef.current.height)
-        const data: Uint8ClampedArray = imageData.data
+        const data = imageData.data
+
+        if (!data) {
+          setHiddenMessage("Failed to retrieve image data.")
+          return
+        }
+
         // Append the end-of-message marker to the message before encoding
-        let messageBinary = (message + END_OF_MESSAGE)
+        const messageBinary = (message + END_OF_MESSAGE)
           .split("")
           .map((char) => char.charCodeAt(0).toString(2).padStart(8, "0"))
           .join("")
-        let dataIndex = 0
 
+        let dataIndex = 0
         for (let i = 0; i < messageBinary.length; i++) {
-          const bit = parseInt(messageBinary[i] as string)
-          let temp = data[dataIndex] as number
-          data[dataIndex] = (temp & ~1) | bit // Encode in the least significant bit
+          const bit = parseInt(messageBinary[i] as string, 2)
+
+          // Ensure dataIndex does not exceed the data array length
+          if (dataIndex >= data.length) {
+            setHiddenMessage("Message is too long to encode in the given image.")
+            return
+          }
+
+          // Encode in the least significant bit using the utility function
+          data[dataIndex] = setLSB(data[dataIndex as number] as number, bit)
           dataIndex += 4 // Move to the next pixel's blue component
         }
 
         ctx.putImageData(imageData, 0, 0)
         setHiddenMessage("Message encoded successfully.")
+      } else {
+        setHiddenMessage("Failed to get 2D context from the canvas.")
       }
+    } else {
+      setHiddenMessage("Canvas reference or message is not available.")
     }
   }
 

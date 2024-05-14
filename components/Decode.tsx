@@ -39,33 +39,37 @@ const Decode: React.FC = () => {
 
   const END_OF_MESSAGE = "$$$$$$" // Define an end-of-message marker
 
+  const getLSB = (byte: number): string => {
+    return (byte & 1).toString()
+  }
+
   const decodeMessage = () => {
     if (decodeRef.current) {
       const ctx = decodeRef.current.getContext("2d")
       if (ctx) {
         const imageData = ctx.getImageData(0, 0, decodeRef.current.width, decodeRef.current.height)
         const data = imageData.data
+        if (!data) {
+          setHiddenMessage("Failed to retrieve image data.")
+          return
+        }
+
         let binaryMessage = ""
         let charBinary = ""
-
         for (let i = 0; i < data.length; i += 4) {
-          if (typeof data[i] === "number") {
-            let temp = data[i] as number
-            charBinary += temp & 1 // Extract the least significant bit
-            if (charBinary.length === 8) {
-              const character = String.fromCharCode(parseInt(charBinary, 2))
-              binaryMessage += character
-              charBinary = "" // Reset for the next character
-              // Check for the end-of-message marker
-              if (binaryMessage.includes(END_OF_MESSAGE)) {
-                // Extract the actual message, excluding the end-of-message marker
-                binaryMessage = binaryMessage.substring(0, binaryMessage.indexOf(END_OF_MESSAGE))
-                break // Stop decoding
-              }
+          charBinary += getLSB(data[i] as number) // Use utility function to extract the least significant bit
+          if (charBinary.length === 8) {
+            const character = String.fromCharCode(parseInt(charBinary, 2))
+            binaryMessage += character
+            charBinary = "" // Reset for the next character
+            // Check for the end-of-message marker
+            if (binaryMessage.includes(END_OF_MESSAGE)) {
+              // Extract the actual message, excluding the end-of-message marker
+              binaryMessage = binaryMessage.substring(0, binaryMessage.indexOf(END_OF_MESSAGE))
+              break // Stop decoding
             }
           }
         }
-
         setHiddenMessage(binaryMessage)
       }
     }
