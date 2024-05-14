@@ -1,5 +1,4 @@
-import React, { useState } from "react"
-import { Button } from "./Button/Button"
+import React from "react"
 import Decode from "./Decode"
 import Encode from "./Encode"
 
