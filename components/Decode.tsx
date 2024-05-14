@@ -49,16 +49,19 @@ const Decode: React.FC = () => {
         let charBinary = ""
 
         for (let i = 0; i < data.length; i += 4) {
-          charBinary += data[i] & 1 // Extract the least significant bit
-          if (charBinary.length === 8) {
-            const character = String.fromCharCode(parseInt(charBinary, 2))
-            binaryMessage += character
-            charBinary = "" // Reset for the next character
-            // Check for the end-of-message marker
-            if (binaryMessage.includes(END_OF_MESSAGE)) {
-              // Extract the actual message, excluding the end-of-message marker
-              binaryMessage = binaryMessage.substring(0, binaryMessage.indexOf(END_OF_MESSAGE))
-              break // Stop decoding
+          if (typeof data[i] === "number") {
+            let temp = data[i] as number
+            charBinary += temp & 1 // Extract the least significant bit
+            if (charBinary.length === 8) {
+              const character = String.fromCharCode(parseInt(charBinary, 2))
+              binaryMessage += character
+              charBinary = "" // Reset for the next character
+              // Check for the end-of-message marker
+              if (binaryMessage.includes(END_OF_MESSAGE)) {
+                // Extract the actual message, excluding the end-of-message marker
+                binaryMessage = binaryMessage.substring(0, binaryMessage.indexOf(END_OF_MESSAGE))
+                break // Stop decoding
+              }
             }
           }
         }
@@ -70,12 +73,12 @@ const Decode: React.FC = () => {
 
   return (
     <div id="image" className="flex flex-col items-center justify-center ">
-      <div className="relative flex h-72 w-72 flex-col items-center justify-center rounded-md border border-gray-300  bg-white ">
+      <div className="relative flex h-72 w-72 flex-col items-center justify-center rounded-md border border-gray-300 bg-white ">
         {image && (
           <img
             src={image as string}
             alt="Uploaded"
-            className=" h-60 w-60 max-w-full border border-gray-300 object-cover "
+            className="h-60 w-60 max-w-full border border-gray-300 object-cover"
           />
         )}
         <ImageInput className="absolute bottom-2" name="file" handleUpload={handleImageChange} />
@@ -83,7 +86,7 @@ const Decode: React.FC = () => {
       <Button
         size={"sm"}
         onClick={decodeMessage}
-        className=" my-3  w-36 rounded-md border border-gray-300 bg-white text-green-500 shadow-sm hover:border-gray-500  hover:text-green-700"
+        className="my-3 w-36 rounded-md border border-gray-300 bg-white text-green-500 shadow-sm hover:border-gray-500 hover:text-green-700"
       >
         Decode
       </Button>

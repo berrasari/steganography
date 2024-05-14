@@ -61,7 +61,8 @@ const Encode: React.FC = () => {
 
         for (let i = 0; i < messageBinary.length; i++) {
           const bit = parseInt(messageBinary[i] as string)
-          data[dataIndex] = (data[dataIndex] & ~1) | bit // Encode in the least significant bit
+          let temp = data[dataIndex] as number
+          data[dataIndex] = (temp & ~1) | bit // Encode in the least significant bit
           dataIndex += 4 // Move to the next pixel's blue component
         }
 

@@ -19,16 +19,16 @@ export default function Web() {
               uygulamasıdır. Steganografi; metin, resim, video veya ses içeriği dâhil olmak üzere neredeyse her tür
               dijital içeriği gizlemek için kullanılabilir. Bu gizli veriler hedefine ulaştıktan sonra çıkarılır.
             </p>
-            <div className="my-4 flex flex-row gap-2">
+            <div className="my-4 flex flex-row gap-1">
               <Button
-                className={`w-40  bg-black ${activeTab === "encode" ? "bg-black" : "opacity-50 hover:opacity-75"}`}
+                className={`w-36  bg-black ${activeTab === "encode" ? "bg-black" : "opacity-50 hover:opacity-75"}`}
                 size={"sm"}
                 onClick={() => setActiveTab("encode")}
               >
                 Encode
               </Button>
               <Button
-                className={`w-40 bg-black ${activeTab === "decode" ? "bg-black" : "opacity-50 hover:opacity-75"}`}
+                className={`w-36 bg-black ${activeTab === "decode" ? "bg-black" : "opacity-50 hover:opacity-75"}`}
                 size={"sm"}
                 onClick={() => setActiveTab("decode")}
               >
