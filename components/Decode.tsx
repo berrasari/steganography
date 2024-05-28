@@ -56,7 +56,7 @@ const Decode: React.FC = () => {
 
         let binaryMessage = ""
         let charBinary = ""
-        for (let i = 0; i < data.length; i += 4) {
+        for (let i = 0; i < data.length; i += 1) {
           charBinary += getLSB(data[i] as number) // Use utility function to extract the least significant bit
           if (charBinary.length === 8) {
             const character = String.fromCharCode(parseInt(charBinary, 2))
