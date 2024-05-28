@@ -80,7 +80,7 @@ const Encode: React.FC = () => {
 
           // Encode in the least significant bit using the utility function
           data[dataIndex] = setLSB(data[dataIndex as number] as number, bit)
-          dataIndex += 4 // Move to the next pixel's blue component
+          dataIndex += 1 // Move to the next pixel component rgb
         }
 
         ctx.putImageData(imageData, 0, 0)
